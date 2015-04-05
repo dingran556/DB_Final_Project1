@@ -31,7 +31,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -56,7 +56,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -72,7 +71,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store <small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -111,34 +110,37 @@ and open the template in the editor.
                                     if(mysqli_num_rows($result) < 1){
                                         exit("The person " . htmlentities($_GET["employee_name"]) . " is not found. Please check the spelling and try again");
                                     }
-                                    echo "<legend>Store Manager</legend><thead><tr><th class=\"text-left\">name</th><th class=\"text-left\">email</th><th class=\"text-left\">salary</th><th class=\"text-left\">Store ID</th></thead><tbody>";
+                                    echo "<legend>Store Manager</legend><thead><tr><th class=\"text-left\">name</th><th class=\"text-left\">email</th><th class=\"text-left\">salary</th><th class=\"text-left\">Level</th><th class=\"text-left\">Store ID</th></thead><tbody>";
                                     while ($row = mysqli_fetch_array($result)) {
-                                        echo "<tr><td>" . htmlentities($row["manager_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["email"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["salary"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["store_id"]) . "</td></tr>\n";
+                                        echo "<tr><td>" . htmlentities($row["Name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Email"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Salary"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Job_Title"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Assigned_Store"]) . "</td></tr>\n";
                                     }
                                     echo "</tbody>";
                                     mysqli_free_result($result);
                                     exit();
                                 }
-                                echo "<legend>Region Manager</legend><thead><tr><th class=\"text-left\">name</th><th class=\"text-left\">email</th><th class=\"text-left\">salary</th><th class=\"text-left\">Region</th></thead><tbody>";
+                                echo "<legend>Region Manager</legend><thead><tr><th class=\"text-left\">name</th><th class=\"text-left\">email</th><th class=\"text-left\">salary</th><th class=\"text-left\">Level</th><th class=\"text-left\">Region</th></thead><tbody>";
                                 while ($row = mysqli_fetch_array($result)) {
-                                    echo "<tr><td>" . htmlentities($row["region_manager_name"]) . "</td>";
-                                    echo "<td>" . htmlentities($row["email"]) . "</td>";
-                                    echo "<td>" . htmlentities($row["salary"]) . "</td>";
-                                    echo "<td>" . htmlentities($row["region_name"]) . "</td></tr>\n";
+                                    echo "<tr><td>" . htmlentities($row["Name"]) . "</td>";
+                                    echo "<td>" . htmlentities($row["Email"]) . "</td>";
+                                    echo "<td>" . htmlentities($row["Salary"]) . "</td>";
+                                    echo "<td>" . htmlentities($row["Job_Title"]) . "</td>";
+                                    echo "<td>" . htmlentities($row["Region_Name"]) . "</td></tr>\n";
                                 }
                                 echo "</tbody>";
                                 mysqli_free_result($result);
                                 exit();
                             }
-                            echo "<legend>Salesman</legend><thead><tr><th class=\"text-left\">name</th><th class=\"text-left\">email</th><th class=\"text-left\">salary</th><th class=\"text-left\">Store ID</th></thead><tbody>";
+                            echo "<legend>Salesman</legend><thead><tr><th class=\"text-left\">name</th><th class=\"text-left\">email</th><th class=\"text-left\">salary</th><th class=\"text-left\">Level</th><th class=\"text-left\">Store ID</th></thead><tbody>";
                             while ($row = mysqli_fetch_array($result)) {
-                                echo "<tr><td>" . htmlentities($row["salesman_name"]) . "</td>";
-                                echo "<td>" . htmlentities($row["email"]) . "</td>";
-                                echo "<td>" . htmlentities($row["salary"]) . "</td>";
-                                echo "<td>" . htmlentities($row["store_id"]) . "</td></tr>\n";
+                                echo "<tr><td>" . htmlentities($row["Name"]) . "</td>";
+                                echo "<td>" . htmlentities($row["Email"]) . "</td>";
+                                echo "<td>" . htmlentities($row["Salary"]) . "</td>";
+                                echo "<td>" . htmlentities($row["Job_Title"]) . "</td>";
+                                echo "<td>" . htmlentities($row["Assigned_Store"]) . "</td></tr>\n";
                             }
                             echo "</tbody>";
                             mysqli_free_result($result);

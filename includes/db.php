@@ -59,17 +59,17 @@ class db extends mysqli {
     }    
     public function get_salesman_information_by_name($name){
         $name = $this->real_escape_string($name);
-        return $this->query("SELECT salesman_name, email, salary, store_id FROM salesman WHERE salesman_name = '" . $name . "'");
+        return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Name = '" . $name . "' and Job_Title = 'Salesperon' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
     
     public function get_region_manager_information_by_name($name){
         $name = $this->real_escape_string($name);
-        return $this->query("SELECT region_manager_name, email, salary , R.region_name FROM region_manager, region as R WHERE R.region_manager_id = region_manager.region_manager_id and region_manager_name = '" . $name ."'");
+        return $this->query("SELECT Employee.EmployeeID, Employee.Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Region_Name From Employee, Region WHERE Employee.Name = '" . $name . "' and Job_Title = 'Region Manager' and Employee.EmployeeID = Region_ManagerID");
     }
     
     public function get_store_manager_information_by_name($name){
         $name = $this->real_escape_string($name);
-        return $this->query("SELECT manager_name, email, salary, S.store_id FROM store_manager, store as S WHERE S.store_manager_id = store_manager.store_manager_id and manager_name = '" . $name. "'");
+        return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Name = '" . $name . "' and Job_Title = 'Store Manager' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
     
     public function insert_salesman($salesman_name, $email, $salary, $storeid){

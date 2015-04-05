@@ -31,7 +31,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -56,7 +56,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -72,7 +71,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -95,7 +94,7 @@ and open the template in the editor.
                                 <li class="title">Region</li>
                                 <li class="stick bg-red"><a href="view_region.php"><i class="icon-cart"></i>Region Info</a></li>
                                 <li class="title">Store</li>
-                                <li class="stick bg-blue"><a href="view_store.php"><i class="icon-cart-2"></i>StoreInfo</a></li>
+                                <li class="stick bg-blue"><a href="view_store.php"><i class="icon-cart-2"></i>Store Info</a></li>
                             </ul>
                         </nav>
                     </div>

@@ -32,7 +32,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                Imanager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -72,7 +72,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                Cosmetic Shop <small class="on-right"> Salesperson</small>
+                Cosmetic Store <small class="on-right"> Salesperson</small>
             </h1>
 
             <nav class="horizontal-menu">

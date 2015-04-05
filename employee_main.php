@@ -31,7 +31,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -56,7 +56,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -72,7 +71,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store <small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -103,13 +102,11 @@ and open the template in the editor.
                         <form name="getemployee" action="getemployee.php">
                             <fieldset>
                                 <legend>Employee Info</legend>
-                                <label>Find emplyee information</label>
+                                <label>Find Employee information</label>
                                 <div class="input-control text" data-role="input-control">
                                     <input type="text" name="employee_name" value="" placeholder="type employee name">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
-      
-
                                 <input type="submit" value="Go">
                             </fieldset>
                         </form>
