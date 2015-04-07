@@ -47,15 +47,15 @@ class db extends mysqli {
     }
     
     public function get_all_region_manager() {
-        return $this->query("SELECT region_manager_id, region_manager_name, email, salary FROM region_manager");
+        return $this->query("SELECT Employee.EmployeeID, Employee.Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Region_Name From Employee, Region WHERE Job_Title = 'Region Manager' and Employee.EmployeeID = Region_ManagerID");
     }
     
     public function get_all_salesman() {
-        return $this->query("SELECT salesman_id, salesman_name, email, salary, store_id FROM salesman");
+        return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Job_Title = 'Salesperon' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
 
     public function get_all_store_manager() {
-        return $this->query("SELECT store_manager_id, manager_name, email, salary FROM store_manager");
+        return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Job_Title = 'Store Manager' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }    
     public function get_salesman_information_by_name($name){
         $name = $this->real_escape_string($name);
@@ -72,8 +72,11 @@ class db extends mysqli {
         return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Name = '" . $name . "' and Job_Title = 'Store Manager' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
     
-    public function insert_salesman($salesman_name, $email, $salary, $storeid){
+    public function insert_salesman($salesman_name, $street, $city, $state, $email, $salary, $store_id){
         $salesman_name = $this->real_escape_string($salesman_name);
+        $street = $this->real_escape_string($street);
+        $city = $this->real_escape_string($city);
+        $state = $this->real_escape_string($state);
         $email = $this->real_escape_string($email);
         $this->query("INSERT INTO salesman (salesman_name, email, salary, store_id)" . 
                         " VALUES ('" . $salesman_name . "', '" . $email . "', " 
@@ -108,8 +111,13 @@ class db extends mysqli {
         $this->query("DELETE FROM region_manager WHERE region_manager_id = " . $region_manager_id);
     }
     
+    public function get_all_store_id(){
+        $sql = "SELECT Distinct StoreID FROM FinalProject.Store";
+        return $this->query($sql);
+    }
+    
     public function get_salesman_by_id($salesman_id){
-        return $this->query("SELECT salesman_id, salesman_name, email, salary, store_id FROM salesman WHERE salesman_id = " . $salesman_id);
+        return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Employee.EmployeeID = " . $salesman_id . " and Job_Title = 'Salesperon' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
     
     public function get_store_manager_by_id($store_manager_id){
@@ -120,11 +128,16 @@ class db extends mysqli {
         return $this->query("SELECT region_manager_id, region_manager_name, email, salary FROM region_manager WHERE region_manager_id = " . $region_manager_id);
     }
     
-    public function update_salesman($salesman_id, $salesman_name, $email, $salary, $storeid){
+    public function update_salesman($salesman_id, $salesman_name, $street, $city, $state, $email, $salary, $store_id){
         $salesman_name = $this->real_escape_string($salesman_name);
+        $street = $this->real_escape_string($street);
+        $city = $this->real_escape_string($city);
+        $state = $this->real_escape_string($state);
         $email = $this->real_escape_string($email);
-        $this->query("UPDATE salesman SET salesman_name = '" . $salesman_name .
-                "', email = '" . $email . "', salary = " . $salary .", store_id = " . $storeid . " WHERE salesman_id = " . $salesman_id);
+        $this->query("UPDATE Employee SET Name = '" . $salesman_name .
+                "', Street = '" . $street . "', City = '" . $city . "', State = '" . $state . "', Email = '" . $email . "', Salary = " . $salary ." WHERE EmployeeID = " . $salesman_id);
+        $this->query("UPDATE Store_Mapping SET Assigned_Store = ". $store_id ." WHERE EmployeeID = " . $salesman_id);
+        
     }  
     
     public function update_store_manager($store_manager_id, $manager_name, $email, $salary){

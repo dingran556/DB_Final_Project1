@@ -32,7 +32,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -57,7 +57,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -73,7 +72,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -105,9 +104,13 @@ and open the template in the editor.
                             <legend>Region Manager Info</legend>
                             <thead>
                                 <tr>
-                                    <th class="text-left">name</th>
-                                    <th class="text-left">email</th>
-                                    <th class="text-left">salary</th>
+                                    <th class="text-left">Region Manager Name</th>
+                                    <th class="text-left">Street</th>
+                                    <th class="text-left">City</th>
+                                    <th class="text-left">State</th>
+                                    <th class="text-left">Email</th>
+                                    <th class="text-left">Salary</th>
+                                    <th class="text-left">Region</th>
                                     <th class="text-left">Edit</th>
                                     <th class="text-left">Delete</th>
                                 </tr>
@@ -117,10 +120,14 @@ and open the template in the editor.
                                     require_once("Includes/db.php");
                                     $result = db::getInstance()->get_all_region_manager();
                                     while($row = mysqli_fetch_array($result)):
-                                        echo "<tr><td>" . htmlentities($row["region_manager_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["email"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["salary"]) . "</td>";
-                                        $region_manager_id = $row["region_manager_id"];
+                                        echo "<tr><td>" . htmlentities($row["Name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Street"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["City"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["State"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Email"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Salary"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Region_Name"]) . "</td>";
+                                        $region_manager_id = $row["EmployeeID"];
                                 ?>
                                 <td>
                                     <form name="editRegionManager" action="edit_region_manager.php" method="GET">
@@ -150,7 +157,7 @@ and open the template in the editor.
                         </script>
                         <form name="addRegionManager" action="edit_region_manager.php">
                             <fieldset>
-                                <legend>Insert RegionManager</legend>    
+                                <legend>Insert Region Manager</legend>    
                                 <input type="submit" value="Insert">
                             </fieldset>
                         </form>
