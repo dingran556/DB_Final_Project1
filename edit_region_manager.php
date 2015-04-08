@@ -11,17 +11,17 @@ and open the template in the editor.
     $IsEmpty = false;
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-     if ($_POST['region_manager_name'] == ""||$_POST['email'] == ""||$_POST['salary'] == "") {
+     if ($_POST['region_manager_name'] == ""||$_POST['street'] == ""||$_POST['city'] == ""||$_POST['state'] == ""||$_POST['zipcode'] == ""||$_POST['email'] == ""||$_POST['salary'] == "") {
         $IsEmpty = true;
     }
 
     else if ($_POST['region_manager_id'] == "") {
-        db::getInstance()->insert_region_manager($_POST['region_manager_name'], $_POST['email'], $_POST['salary']);
+        db::getInstance()->insert_region_manager($_POST['region_manager_name'],$_POST['street'], $_POST['city'], $_POST['state'], $_POST['zipcode'],$_POST['email'], $_POST['salary']);
         header('Location: view_region_manager.php');
         exit;
     } 
     else if ($_POST['region_manager_id'] != "") {
-        db::getInstance()->update_region_manager($_POST['region_manager_id'], $_POST['region_manager_name'], $_POST['email'], $_POST['salary']);
+        db::getInstance()->update_region_manager($_POST['region_manager_id'], $_POST['region_manager_name'],$_POST['street'], $_POST['city'], $_POST['state'], $_POST['zipcode'],$_POST['email'], $_POST['salary']);
         header('Location: view_region_manager.php');
         exit;
     }
@@ -54,7 +54,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                Manager
             </div>
  
             <span class="element-divider"></span>
@@ -79,7 +79,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -95,7 +94,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -127,39 +126,66 @@ and open the template in the editor.
                         if ($_SERVER['REQUEST_METHOD'] == "POST")
                             $region_manager = array("region_manager_id" => $_POST['region_manager_id'],
                                 "region_manager_name" => $_POST['region_manager_name'],
+                                "street" => $_POST['street'],
+                                "city" => $_POST['city'],
+                                "state" => $_POST['state'],
+                                "zipcode" => $_POST['zipcode'],
                                 "email" => $_POST['email'],
                                 "salary" => $_POST['salary']);
                         else if (array_key_exists("region_manager_id", $_GET)) {
                             $region_manager = mysqli_fetch_array(db::getInstance()->get_region_manager_by_id($_GET['region_manager_id']));
                         } else{
-                            $region_manager = array("region_manager_id" => "",
-                                        "region_manager_name" => "",
-                                        "email" => "",
-                                        "salary" => "");
+                            $region_manager = array("EmployeeID" => "",
+                                        "Name" => "",
+                                        "Street" => "",
+                                        "City" => "",
+                                        "State" => "",
+                                        "Zipcode" => "",
+                                        'Email' => "",
+                                        'Salary' => "");
                         }
 
                         ?>
                         <form name="getregionmanager" action="edit_region_manager.php" method="POST">
                             <fieldset>
-                                <legend>Edit RegionManager</legend>
-                                <input type="hidden" name="region_manager_id" value="<?php echo $region_manager['region_manager_id']; ?>" />
+                                <legend>Edit Region Manager</legend>
+                                <input type="hidden" name="region_manager_id" value="<?php echo $region_manager['EmployeeID']; ?>" />
                                 Name:</br>
                                 <div class="input-control text" data-role="input-control" >
-                                    <input type="text" name="region_manager_name" value="<?php echo $region_manager['region_manager_name']; ?>">
+                                    <input type="text" name="region_manager_name" value="<?php echo $region_manager['Name']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                Street:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="street" value="<?php echo $region_manager['Street']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                City:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="city" value="<?php echo $region_manager['City']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                State:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="state" value="<?php echo $region_manager['State']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                Zip Code:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="zipcode" value="<?php echo $region_manager['Zipcode']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
                                 Email:</br>
                                 <div class="input-control text" data-role="input-control">
-                                    <input type="text" name="email" value="<?php echo $region_manager['email']; ?>">
+                                    <input type="text" name="email" value="<?php echo $region_manager['Email']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
                                 Salary:</br>
                                 <div class="input-control text" data-role="input-control">
-                                    <input type="text" name="salary" value="<?php echo $region_manager['salary']; ?>">
+                                    <input type="text" name="salary" value="<?php echo $region_manager['Salary']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
-      
-
+                                
                                 <input type="submit" value="Save changes">
                                 <?php
                                     if($IsEmpty)

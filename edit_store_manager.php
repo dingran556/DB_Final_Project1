@@ -6,22 +6,22 @@ and open the template in the editor.
 -->
 <html>
     <?php
-
     require_once("Includes/db.php");
     $IsEmpty = false;
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-     if ($_POST['manager_name'] == ""||$_POST['email'] == ""||$_POST['salary'] == "") {
+     if ($_POST['manager_name'] == ""||$_POST['street'] == ""||$_POST['city'] == ""||$_POST['state'] == ""||$_POST['zipcode'] == ""||$_POST['email'] == ""||$_POST['salary'] == ""||$_POST['store_id'] == "") {
         $IsEmpty = true;
     }
 
     else if ($_POST['store_manager_id'] == "") {
-        db::getInstance()->insert_store_manager($_POST['manager_name'], $_POST['email'], $_POST['salary']);
+        db::getInstance()->insert_store_manager($_POST['manager_name'],$_POST['street'], $_POST['city'], $_POST['state'], $_POST['zipcode'],$_POST['email'], $_POST['salary'], $_POST['store_id']);
         header('Location: view_store_manager.php');
         exit;
     } 
     else if ($_POST['store_manager_id'] != "") {
-        db::getInstance()->update_store_manager($_POST['store_manager_id'], $_POST['manager_name'], $_POST['email'], $_POST['salary']);
+        db::getInstance()->update_store_manager($_POST['store_manager_id'], $_POST['manager_name'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['zipcode'],$_POST['email'], $_POST['salary'], $_POST['store_id']);
+        echo $_POST['store_manager_id']; 
         header('Location: view_store_manager.php');
         exit;
     }
@@ -54,7 +54,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -79,7 +79,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -95,7 +94,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -127,39 +126,83 @@ and open the template in the editor.
                         if ($_SERVER['REQUEST_METHOD'] == "POST")
                             $store_manager = array("store_manager_id" => $_POST['store_manager_id'],
                                 "manager_name" => $_POST['manager_name'],
+                                "street" => $_POST['street'],
+                                "city" => $_POST['city'],
+                                "state" => $_POST['state'],
+                                "zipcode" => $_POST['zipcode'],
                                 "email" => $_POST['email'],
-                                "salary" => $_POST['salary']);
+                                "salary" => $_POST['salary'],
+                                'store_id' => $_POST['store_id']);
                         else if (array_key_exists("store_manager_id", $_GET)) {
                             $store_manager = mysqli_fetch_array(db::getInstance()->get_store_manager_by_id($_GET['store_manager_id']));
                         } else{
-                            $store_manager = array("store_manager_id" => "",
-                                        "manager_name" => "",
-                                        "email" => "",
-                                        "salary" => "");
+                            $store_manager = array("EmployeeID" => "",
+                                        "Name" => "",
+                                        "Street" => "",
+                                        "City" => "",
+                                        "State" => "",
+                                        "Zipcode" => "",
+                                        'Email' => "",
+                                        'Salary' => "",
+                                        'Assigned_Store' => "",
+                                );
                         }
 
                         ?>
                         <form name="getstoremanager" action="edit_store_manager.php" method="POST">
                             <fieldset>
-                                <legend>Edit StoreManager</legend>
-                                <input type="hidden" name="store_manager_id" value="<?php echo $store_manager['store_manager_id']; ?>" />
+                                <legend>Edit Store Manager</legend>
+                                <input type="hidden" name="store_manager_id" value="<?php echo $store_manager['EmployeeID']; ?>" />
                                 Name:</br>
                                 <div class="input-control text" data-role="input-control" >
-                                    <input type="text" name="manager_name" value="<?php echo $store_manager['manager_name']; ?>">
+                                    <input type="text" name="manager_name" value="<?php echo $store_manager['Name']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                Street:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="street" value="<?php echo $store_manager['Street']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                City:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="city" value="<?php echo $store_manager['City']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                State:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="state" value="<?php echo $store_manager['State']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                Zip Code:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="zipcode" value="<?php echo $store_manager['Zipcode']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
                                 Email:</br>
                                 <div class="input-control text" data-role="input-control">
-                                    <input type="text" name="email" value="<?php echo $store_manager['email']; ?>">
+                                    <input type="text" name="email" value="<?php echo $store_manager['Email']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
                                 Salary:</br>
                                 <div class="input-control text" data-role="input-control">
-                                    <input type="text" name="salary" value="<?php echo $store_manager['salary']; ?>">
+                                    <input type="text" name="salary" value="<?php echo $store_manager['Salary']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
-      
-
+                                </br>Store ID:
+                                <div class="input-control select" data-role="input-control">
+                                    <select name="store_id">
+                                        <option><?php echo $store_manager['Assigned_Store']; ?></option>
+                                        <?php
+                                            require_once("Includes/db.php");
+                                            $result = db::getInstance()->get_all_store_id();
+                                            while($row = mysqli_fetch_array($result)){
+                                                if((htmlentities($row["StoreID"]))!= $salesman['Assigned_Store']){
+                                                    echo "<option>". htmlentities($row["StoreID"]) ."</option>";
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
                                 <input type="submit" value="Save changes">
                                 <?php
                                     if($IsEmpty)

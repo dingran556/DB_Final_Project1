@@ -108,6 +108,7 @@ and open the template in the editor.
                                     <th class="text-left">Street</th>
                                     <th class="text-left">City</th>
                                     <th class="text-left">State</th>
+                                    <th class="text-left">Zip Code</th>
                                     <th class="text-left">Email</th>
                                     <th class="text-left">Salary</th>
                                     <th class="text-left">Store ID</th>
@@ -124,6 +125,7 @@ and open the template in the editor.
                                         echo "<td>" . htmlentities($row["Street"]) . "</td>";
                                         echo "<td>" . htmlentities($row["City"]) . "</td>";
                                         echo "<td>" . htmlentities($row["State"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Zipcode"]) . "</td>";
                                         echo "<td>" . htmlentities($row["Email"]) . "</td>";
                                         echo "<td>" . htmlentities($row["Salary"]) . "</td>";
                                         echo "<td>" . htmlentities($row["Assigned_Store"]) . "</td>";

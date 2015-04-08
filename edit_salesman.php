@@ -11,17 +11,17 @@ and open the template in the editor.
     $IsEmpty = false;
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-     if ($_POST['salesman_name'] == ""||$_POST['street'] == ""||$_POST['city'] == ""||$_POST['state'] == ""||$_POST['email'] == ""||$_POST['salary'] == ""||$_POST['store_id'] == "") {
+     if ($_POST['salesman_name'] == ""||$_POST['street'] == ""||$_POST['city'] == ""||$_POST['state'] == ""||$_POST['zipcode'] == ""||$_POST['email'] == ""||$_POST['salary'] == ""||$_POST['store_id'] == "") {
         $IsEmpty = true;
     }
 
     else if ($_POST['salesman_id'] == "") {
-        db::getInstance()->insert_salesman($_POST['salesman_name'],$_POST['street'],$_POST['city'],$_POST['state'],$_POST['email'],$_POST['salary'],$_POST['store_id']);
+        db::getInstance()->insert_salesman($_POST['salesman_name'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['zipcode'],$_POST['email'], $_POST['salary'], $_POST['store_id']);
         header('Location: view_salesman.php');
         exit;
     } 
     else if ($_POST['salesman_id'] != "") {
-        db::getInstance()->update_salesman($_POST['salesman_id'], $_POST['salesman_name'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['email'], $_POST['salary'], $_POST['store_id']);
+        db::getInstance()->update_salesman($_POST['salesman_id'], $_POST['salesman_name'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['zipcode'],$_POST['email'], $_POST['salary'], $_POST['store_id']);
         header('Location: view_salesman.php');
         exit;
     }
@@ -129,6 +129,7 @@ and open the template in the editor.
                                 "street" => $_POST['street'],
                                 "city" => $_POST['city'],
                                 "state" => $_POST['state'],
+                                "zipcode" => $_POST['zipcode'],
                                 "email" => $_POST['email'],
                                 "salary" => $_POST['salary'],
                                 'store_id' => $_POST['store_id']);
@@ -140,6 +141,7 @@ and open the template in the editor.
                                         "Street" => "",
                                         "City" => "",
                                         "State" => "",
+                                        "Zipcode" => "",
                                         'Email' => "",
                                         'Salary' => "",
                                         'Assigned_Store' => "",
@@ -169,6 +171,11 @@ and open the template in the editor.
                                 State:</br>
                                 <div class="input-control text" data-role="input-control">
                                     <input type="text" name="state" value="<?php echo $salesman['State']; ?>">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                Zip Code:</br>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="zipcode" value="<?php echo $salesman['Zipcode']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
                                 Email:</br>

@@ -15,8 +15,8 @@ class db extends mysqli {
     // single instance of self shared among all instances
     private static $instance = null;
     // db connection config vars
-    private $user = "rad";
-    private $pass = "Trjf4zhBCR9ZuW2u";
+    private $user = "root";
+    private $pass = "root";
     private $dbName = "FinalProject";
     private $dbHost = "localhost";
     //This method must be static, and must return an instance of the object if the object
@@ -72,39 +72,54 @@ class db extends mysqli {
         return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Name = '" . $name . "' and Job_Title = 'Store Manager' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
     
-    public function insert_salesman($salesman_name, $street, $city, $state, $email, $salary, $store_id){
+    public function insert_salesman($salesman_name, $street, $city, $state, $zipcode, $email, $salary, $store_id){
         $salesman_name = $this->real_escape_string($salesman_name);
         $street = $this->real_escape_string($street);
         $city = $this->real_escape_string($city);
+        $jobtitle = "Salesperon";
         $state = $this->real_escape_string($state);
+        $zipcode = $this->real_escape_string($zipcode);
         $email = $this->real_escape_string($email);
-        $this->query("INSERT INTO salesman (salesman_name, email, salary, store_id)" . 
-                        " VALUES ('" . $salesman_name . "', '" . $email . "', " 
-                        . $salary . ", ". $storeid .")");
+        $this->query("INSERT INTO FinalProject.Employee (Name, Job_Title, Street, City, State, Zipcode, Email, Salary)".
+                     "VALUES ('" . $salesman_name . "', '$jobtitle','" . $street . "','" . $city . "', '" . $state . "','" . $zipcode . "','" . $email . "', " . $salary .")");
+        $this->query("INSERT INTO Store_Mapping (EmployeeID, Assigned_Store)" . 
+                        "VALUES (LAST_INSERT_ID(), " . $store_id . ")");
     }
     
-    public function insert_region_manager($region_manager_name, $email, $salary){
-        $salesman_name = $this->real_escape_string($region_manager_name);
+    public function insert_region_manager($region_manager_name, $street, $city, $state, $zipcode, $email, $salary){
+        $region_manager_name = $this->real_escape_string($region_manager_name);
+        $street = $this->real_escape_string($street);
+        $city = $this->real_escape_string($city);
+        $jobtitle = "Region Manager";
+        $state = $this->real_escape_string($state);
+        $zipcode = $this->real_escape_string($zipcode);
         $email = $this->real_escape_string($email);
-        $this->query("INSERT INTO region_manager (region_manager_name, email, salary)" . 
-                        " VALUES ('" . $region_manager_name . "', '" . $email . "', " 
-                        . $salary . ")");
+        $this->query("INSERT INTO FinalProject.Employee (Name, Job_Title, Street, City, State, Zipcode, Email, Salary)".
+                     "VALUES ('" . $region_manager_name . "', '$jobtitle','" . $street . "','" . $city . "', '" . $state . "','" . $zipcode . "','" . $email . "', " . $salary .")");
     }
     
-    public function insert_store_manager($manager_name, $email, $salary){
+    public function insert_store_manager($manager_name, $street, $city, $state, $zipcode, $email, $salary, $store_id){
         $manager_name = $this->real_escape_string($manager_name);
+        $street = $this->real_escape_string($street);
+        $city = $this->real_escape_string($city);
+        $jobtitle = "Store Manager";
+        $state = $this->real_escape_string($state);
+        $zipcode = $this->real_escape_string($zipcode);
         $email = $this->real_escape_string($email);
-        $this->query("INSERT INTO store_manager (manager_name, email, salary)" . 
-                        " VALUES ('" . $manager_name . "', '" . $email . "', " 
-                        . $salary . ")");
+        $this->query("INSERT INTO FinalProject.Employee (Name, Job_Title, Street, City, State, Zipcode, Email, Salary)".
+                     "VALUES ('" . $manager_name . "', '$jobtitle','" . $street . "','" . $city . "', '" . $state . "','" . $zipcode . "','" . $email . "', " . $salary .")");
+        $this->query("INSERT INTO Store_Mapping (EmployeeID, Assigned_Store)" . 
+                        "VALUES (LAST_INSERT_ID(), " . $store_id . ")");
     }
     
     public function delete_store_manager($store_manager_id){
-        $this->query("DELETE FROM store_manager WHERE store_manager_id = " . $store_manager_id);
+        $this->query("DELETE FROM Employee WHERE EmployeeID = " . $store_manager_id);
+        $this->query("DELETE FROM Store_Mapping WHERE EmployeeID = " . $store_manager_id);;
     }
     
     public function delete_salesman ($salesman_id){
-        $this->query("DELETE FROM salesman WHERE salesman_id = " . $salesman_id);
+        $this->query("DELETE FROM Employee WHERE EmployeeID = " . $salesman_id);
+        $this->query("DELETE FROM Store_Mapping WHERE EmployeeID = " . $salesman_id);
     }
     
     public function delete_region_manager ($region_manager_id){
@@ -121,41 +136,48 @@ class db extends mysqli {
     }
     
     public function get_store_manager_by_id($store_manager_id){
-        return $this->query("SELECT store_manager_id, manager_name, email, salary FROM store_manager WHERE store_manager_id = " . $store_manager_id);
+        return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Employee.EmployeeID = " . $store_manager_id . " and Job_Title = 'Store Manager' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
     
     public function get_region_manager_by_id($region_manager_id){
-        return $this->query("SELECT region_manager_id, region_manager_name, email, salary FROM region_manager WHERE region_manager_id = " . $region_manager_id);
+        return $this->query("SELECT Employee.EmployeeID, Employee.Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Region_Name, RegionID From Employee, Region WHERE Employee.EmployeeID = " . $region_manager_id . " and Job_Title = 'Region Manager' and Employee.EmployeeID = Region_ManagerID");
     }
     
-    public function update_salesman($salesman_id, $salesman_name, $street, $city, $state, $email, $salary, $store_id){
+    public function update_salesman($salesman_id, $salesman_name, $street, $city, $state, $zipcode, $email, $salary, $store_id){
         $salesman_name = $this->real_escape_string($salesman_name);
         $street = $this->real_escape_string($street);
         $city = $this->real_escape_string($city);
         $state = $this->real_escape_string($state);
         $email = $this->real_escape_string($email);
         $this->query("UPDATE Employee SET Name = '" . $salesman_name .
-                "', Street = '" . $street . "', City = '" . $city . "', State = '" . $state . "', Email = '" . $email . "', Salary = " . $salary ." WHERE EmployeeID = " . $salesman_id);
+                "', Street = '" . $street . "', City = '" . $city . "', State = '" . $state . "', Zipcode = '" . $zipcode . "', Email = '" . $email . "', Salary = " . $salary ." WHERE EmployeeID = " . $salesman_id);
         $this->query("UPDATE Store_Mapping SET Assigned_Store = ". $store_id ." WHERE EmployeeID = " . $salesman_id);
         
     }  
     
-    public function update_store_manager($store_manager_id, $manager_name, $email, $salary){
+    public function update_store_manager($store_manager_id, $manager_name, $street, $city, $state, $zipcode, $email, $salary, $store_id){
         $manager_name = $this->real_escape_string($manager_name);
+        $street = $this->real_escape_string($street);
+        $city = $this->real_escape_string($city);
+        $state = $this->real_escape_string($state);
         $email = $this->real_escape_string($email);
-        $this->query("UPDATE store_manager SET manager_name = '" . $manager_name .
-                "', email = '" . $email . "', salary = " . $salary ." WHERE store_manager_id = " . $store_manager_id);
+        $this->query("UPDATE Employee SET Name = '" . $manager_name .
+                "', Street = '" . $street . "', City = '" . $city . "', State = '" . $state . "', Zipcode = '" . $zipcode . "', Email = '" . $email . "', Salary = " . $salary ." WHERE EmployeeID = " . $store_manager_id);
+        $this->query("UPDATE Store_Mapping SET Assigned_Store = ". $store_id ." WHERE EmployeeID = " . $store_manager_id);
     }  
     
-    public function update_region_manager($region_manager_id, $region_manager_name, $email, $salary){
+    public function update_region_manager($region_manager_id, $region_manager_name, $street, $city, $state, $zipcode, $email, $salary){
         $region_manager_name = $this->real_escape_string($region_manager_name);
+        $street = $this->real_escape_string($street);
+        $city = $this->real_escape_string($city);
+        $state = $this->real_escape_string($state);
         $email = $this->real_escape_string($email);
-        $this->query("UPDATE region_manager SET region_manager_name = '" . $region_manager_name .
-                "', email = '" . $email . "', salary = " . $salary ." WHERE region_manager_id = " . $region_manager_id);
+        $this->query("UPDATE Employee SET Name = '" . $region_manager_name .
+                "', Street = '" . $street . "', City = '" . $city . "', State = '" . $state . "', Zipcode = '" . $zipcode . "', Email = '" . $email . "', Salary = " . $salary ." WHERE EmployeeID = " . $region_manager_id);
     }  
     
     public function get_all_region(){
-        return $this->query("SELECT region_id, region_name, region_manager_name FROM region, region_manager WHERE region.region_manager_id = region_manager.region_manager_id");
+        return $this->query("SELECT RegionID, Region_Name, Region_ManagerID, Employee.Name FROM Region, Employee WHERE region.Region_ManagerID = Employee.EmployeeID");
     }
     
     public function delete_region($region_id){
