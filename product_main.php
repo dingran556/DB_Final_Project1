@@ -71,7 +71,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                Cosmetic Store<small class="on-right">manager</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">

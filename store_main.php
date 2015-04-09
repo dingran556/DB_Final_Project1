@@ -71,7 +71,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                Cosmetic<small class="on-right">Employee</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -91,9 +91,7 @@ and open the template in the editor.
                             <ul>
                                 <li class="title">Home</li>
                                 <li class="active"><a href="store_main.php"><i class="icon-home"></i>Store Home</a></li>
-                                <li class="title">Region</li>
                                 <li class="stick bg-red"><a href="view_region.php"><i class="icon-cart"></i>Region Info</a></li>
-                                <li class="title">Store</li>
                                 <li class="stick bg-blue"><a href="view_store.php"><i class="icon-cart-2"></i>Store Info</a></li>
                             </ul>
                         </nav>

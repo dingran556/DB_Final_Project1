@@ -11,17 +11,17 @@ and open the template in the editor.
     $IsEmpty = false;
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-     if ($_POST['region_name'] == ""||$_POST['region_manager_name'] == "") {
+     if ($_POST['region_name'] == ""||$_POST['region_manager_id'] == "") {
         $IsEmpty = true;
     }
 
     else if ($_POST['region_id'] == "") {
-        db::getInstance()->insert_region($_POST['region_name'], $_POST['region_manager_name']);
+        db::getInstance()->insert_region($_POST['region_name'], $_POST['region_manager_id']);
         header('Location: view_region.php');
         exit;
     } 
     else if ($_POST['region_id'] != "") {
-        db::getInstance()->update_region($_POST['region_id'], $_POST['region_name'], $_POST['region_manager_name']);
+        db::getInstance()->update_region($_POST['region_id'], $_POST['region_name'], $_POST['region_manager_id']);
         header('Location: view_region.php');
         exit;
     }
@@ -54,7 +54,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -79,7 +79,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -95,7 +94,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store <small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -115,10 +114,8 @@ and open the template in the editor.
                             <ul>
                                 <li class="title">Home</li>
                                 <li><a href="store_main.php"><i class="icon-home"></i>Store Home</a></li>
-                                <li class="title">Region</li>
                                 <li class="stick bg-red active"><a href="view_region.php"><i class="icon-cart"></i>Region Info</a></li>
-                                <li class="title">Store</li>
-                                <li class="stick bg-blue"><a href="view_store.php"><i class="icon-cart-2"></i>StoreInfo</a></li>
+                                <li class="stick bg-blue"><a href="view_store.php"><i class="icon-cart-2"></i>Store Info</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -127,42 +124,40 @@ and open the template in the editor.
                         if ($_SERVER['REQUEST_METHOD'] == "POST")
                             $region = array("region_id" => $_POST['region_id'],
                                 "region_name" => $_POST['region_name'],
-                                "region_manager_name" => $_POST['region_manager_name']);
+                                "region_manager_id" => $_POST['region_manager_id']);
                         else if (array_key_exists("region_id", $_GET)) {
                             $region = mysqli_fetch_array(db::getInstance()->get_region_by_id($_GET['region_id']));
                         } else{
-                            $region = array("region_id" => "",
-                                        "region_name" => "",
-                                        "region_manager_name" => "");
+                            $region = array("RegionID" => "",
+                                        "Region_Name" => "",
+                                        "Region_ManagerID" => "");
                         }
 
                         ?>
                         <form name="getregion" action="edit_region.php" method="POST">
                             <fieldset>
                                 <legend>Edit Region</legend>
-                                <input type="hidden" name="region_id" value="<?php echo $region['region_id']; ?>" />
+                                <input type="hidden" name="region_id" value="<?php echo $region['RegionID']; ?>" />
                                 Region Name:</br>
                                 <div class="input-control text" data-role="input-control" >
-                                    <input type="text" name="region_name" value="<?php echo $region['region_name']; ?>">
+                                    <input type="text" name="region_name" value="<?php echo $region['Region_Name']; ?>">
                                     <button class="btn-clear" tabindex="-1"></button>
                                 </div>
-                                Region Manager Name:</br>
+                                Region Manager ID:</br>
                                 <div class="input-control select" data-role="input-control">
-                                    <select name="region_manager_name">
-                                        <option><?php echo $region['region_manager_name']; ?></option>
+                                    <select name="region_manager_id">
+                                        <option><?php echo $region['Region_ManagerID']; ?></option>
                                         <?php
                                             require_once("Includes/db.php");
-                                            $result = db::getInstance()->get_all_region_manager();
+                                            $result = db::getInstance()->get_all_region_manager_id();
                                             while($row = mysqli_fetch_array($result)){
-                                                if((htmlentities($row["region_manager_name"]))!= $region['region_manager_name']){
-                                                    echo "<option>". htmlentities($row["region_manager_name"]) ."</option>";
+                                                if((htmlentities($row["EmployeeID"]))!= $region['Region_ManagerID']){
+                                                    echo "<option>". htmlentities($row["EmployeeID"]) ."</option>";
                                                 }
                                             }
                                         ?>
                                     </select>
                                 </div>
-      
-
                                 <input type="submit" value="Save changes">
                                 <?php
                                     if($IsEmpty)

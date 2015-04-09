@@ -15,23 +15,17 @@ and open the template in the editor.
         } else if ($_POST['transaction_id'] == "") {
             db::getInstance()->insert_transaction($_POST['customer_id'], $_POST['salesman_name'], $_POST['date'], $_POST['remark']);
             $last_transaction_id = db::getInstance()->insert_id;
+            echo $last_transaction_id;
             if(!empty($_POST['id'])){
                 for($i=0; $i < count($_POST['id']); $i++){
                     $product_id=(string)$_POST['id'][$i];
                     db::getInstance()->insert_order_specify($last_transaction_id, $_POST['id'][$i], $_POST[$product_id]);
-
-                     //echo $_POST['id'][$i]."\n".$_POST[$product_id]."\n".$i."</br>";
-    
                     db::getInstance()->reduce_product($_POST['id'][$i], $_POST[$product_id]);                   
             }
             }
             header('Location: transaction_main.php');
             exit;
-        } /*else if ($_POST['transaction_id'] != "") {
-            db::getInstance()->update_region($_POST['region_id'], $_POST['region_name'], $_POST['region_manager_name']);
-            header('Location: view_region.php');
-            exit;
-        }*/
+        } 
     }
     ?>
     <link href="css/metro-bootstrap.css" rel="stylesheet">
@@ -61,7 +55,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
                 <div class="element">
-                    IManager
+                    iManager
                 </div>
 
                 <span class="element-divider"></span>
@@ -85,8 +79,9 @@ and open the template in the editor.
                 <a class="element place-right" href="welcome.php"><span class="icon-home"></span></a>
                 <span class="element-divider place-right"></span>
                 <button class="element image-button image-left place-right">
-<?php
-session_start();
+
+                    
+                    <?php
 if (array_key_exists("user", $_SESSION)) {
     echo $_SESSION['user'];
 } else {
@@ -101,7 +96,7 @@ if (array_key_exists("user", $_SESSION)) {
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -125,64 +120,57 @@ if (array_key_exists("user", $_SESSION)) {
                         </nav>
                     </div>
                     <div class='span8'>
-<?php
-if ($_SERVER['REQUEST_METHOD'] == "POST")
-    $transaction = array("transaction_id" => $_POST['transaction_id'],
-        "customer_id" => $_POST['customer_id'],
-        "salesman_name" => $_POST['salesman_name'],
-        "date" => $_POST['date'],
-        "remark" => $_POST['remark']);
-/*else if (array_key_exists("region_id", $_GET)) {
-    $region = mysqli_fetch_array(db::getInstance()->get_region_by_id($_GET['region_id']));
-}*/ else {
-    $transaction = array("transaction_id" => "",
-        "customer_id" => "",
-        "salesman_name" => "",
-        "date" => "",
-        "remark" => "");
-}
-?>
+                    <?php
+                        if ($_SERVER['REQUEST_METHOD'] == "POST")
+                            $transaction = array("transaction_id" => $_POST['transaction_id'],
+                                "customer_id" => $_POST['customer_id'],
+                                "salesman_name" => $_POST['salesman_name'],
+                                "date" => $_POST['date'],
+                                "remark" => $_POST['remark']);
+                        else {
+                            $transaction = array("transaction_id" => "",
+                                "customer_id" => "",
+                                "salesman_name" => "",
+                                "date" => "",
+                                "remark" => "");
+                        }
+                        ?>
                         <form name="getregion" action="edit_transaction.php" method="POST">
                             <fieldset>
                                 <legend>Insert Transaction</legend>
                                 <input type="hidden" name="transaction_id" value="<?php echo $transaction['transaction_id']; ?>" />
-                                Customer Name:</br>
+                                Customer ID:</br>
                                 <div class="input-control select" data-role="input-control">
                                     <select name="customer_id">
                                         <option><?php echo $transaction['customer_id']; ?></option>
-<?php
-require_once("Includes/db.php");
-$result = db::getInstance()->get_all_customer_id();
-while ($row = mysqli_fetch_array($result)) {
-        echo "<option>" . htmlentities($row["customer_id"]) . "</option>";
-}
-mysqli_free_result($result);
-?>
+                                        <?php
+                                        require_once("Includes/db.php");
+                                        $result = db::getInstance()->get_all_customer_id();
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option>" . htmlentities($row["CustomerID"]) . "</option>";
+                                        }
+                                        mysqli_free_result($result);
+                                        ?>
                                     </select>
                                 </div>
-                                Salesman Name:</br>
+                                Salesperson ID:</br>
                                 <div class="input-control select" data-role="input-control">
                                     <select name="salesman_name">
                                         <option><?php echo $transaction['salesman_name']; ?></option>
-<?php
-$result = db::getInstance()->get_all_salesman();
-while ($row = mysqli_fetch_array($result)) {
-        echo "<option>" . htmlentities($row["salesman_name"]) . "</option>";
-}
-mysqli_free_result($result);
-?>
+                                        <?php
+                                        $result = db::getInstance()->get_all_salesman();
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option>" . htmlentities($row["Name"]) . "</option>";
+                                        }
+                                        mysqli_free_result($result);
+                                        ?>
                                     </select>
                                 </div>
                                 Date:</br>
-                                <div class="input-control text" data-role="datepicker"
-                                data-date="2013-01-01"
-                                data-format="yyyy-m-d"
-                                data-position="top|bottom"
-                                data-effect="none|slide|fade">
-                                    <input type="text" name="date">
-                                    <button class="btn-date"></button>
+                                <div class="input-control textarea" data-role="input-control textarea" >
+                                    <textarea name="date"></textarea>
                                 </div>
-                                Remark:</br>
+                                Status:</br>
                                 <div class="input-control textarea" data-role="input-control textarea" >
                                     <textarea name="remark"></textarea>
                                 </div>
@@ -191,11 +179,10 @@ mysqli_free_result($result);
                                     <?php
                                     $result = db::getInstance()->get_all_product();
                                     while ($row = mysqli_fetch_array($result)):
-                                        echo "<label><input type=\"checkbox\" name=\"id[]\" value=\"". htmlentities($row["product_id"]) ."\"/><span class=\"check\"></span>". htmlentities($row["name"]) ."</label>";
-                                    ?>
-                                    <input type="number" name="<?php echo htmlentities($row["product_id"]); ?>" min="1" max="100">
-
-                                    <?php
+                                        echo "<label><input type=\"checkbox\" name=\"id[]\" value=\"" . htmlentities($row["ProductID"]) . "\"/><span class=\"check\"></span>" . htmlentities($row["Name"]) . "</label>";
+                                        ?>
+                                        <input type="number" name="<?php echo htmlentities($row["ProductID"]); ?>" min="1" max="100">
+                                        <?php
                                     endwhile;
                                     mysqli_free_result($result);
                                     ?>
@@ -203,10 +190,10 @@ mysqli_free_result($result);
 
                                 </br>
                                 <input type="submit" value="Insert">
-                                        <?php
-                                        if ($IsEmpty)
-                                            echo "Please fill the blank<br/>";
-                                        ?>
+                                <?php
+                                if ($IsEmpty)
+                                    echo "Please fill the blank<br/>";
+                                ?>
                             </fieldset>
                         </form>
                     </div>

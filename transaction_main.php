@@ -32,7 +32,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
                 <div class="element">
-                    IManager
+                    iManager
                 </div>
 
                 <span class="element-divider"></span>
@@ -57,7 +57,6 @@ and open the template in the editor.
                 <span class="element-divider place-right"></span>
                 <button class="element image-button image-left place-right">
                     <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                         echo $_SESSION['user'];
                     } else {
@@ -72,7 +71,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -101,11 +100,12 @@ and open the template in the editor.
                             <thead>
                                 <tr>
                                     <th class="text-left">Transaction Id</th>
-                                    <th class="text-left">customer name</th>
-                                    <th class="text-left">salesman name</th>
-                                    <th class="text-left">date</th>
-                                    <th class="text-left">remark</th>
-                                    <th class="text-left">product</th>
+                                    <th class="text-left">Customer name</th>
+                                    <th class="text-left">Salesman name</th>
+                                    <th class="text-left">Date</th>
+                                    <th class="text-left">Status</th>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-left">Confirm</th>
                                     <th class="text-left">Delete</th>
                                 </tr>
                             </thead>
@@ -114,12 +114,12 @@ and open the template in the editor.
                                 require_once("Includes/db.php");
                                 $result = db::getInstance()->get_all_transaction_home();
                                 while ($row = mysqli_fetch_array($result)):
-                                    echo "<tr><td>" . htmlentities($row["transaction_id"]) . "</td>";
-                                    echo "<td>" . htmlentities($row["home_name"]) . "</td>";
-                                    echo "<td>" . htmlentities($row["salesman_name"]) . "</td>";
+                                    echo "<tr><td>" . htmlentities($row["TransactionID"]) . "</td>";
+                                    echo "<td>" . htmlentities($row["Name"]) . "</td>";
+                                    echo "<td>" . htmlentities($row["SalespersonName"]) . "</td>";
                                     echo "<td>" . htmlentities($row["date"]) . "</td>";
-                                    echo "<td>" . htmlentities($row["remark"]) . "</td>";
-                                    $transaction_id = $row["transaction_id"];
+                                    echo "<td>" . htmlentities($row["Status"]) . "</td>";
+                                    $transaction_id = $row["TransactionID"];
                                     $result_product = db::getInstance()->get_all_product_by_transaction_id($transaction_id);
                                     echo "<td>";
                                     while ($row = mysqli_fetch_array($result_product)) {
@@ -127,6 +127,12 @@ and open the template in the editor.
                                     }
                                     echo "</td>";
                                     ?>
+                                <td>
+                                    <form name="confirmTransaction" action="confirm_transaction.php" method="POST">
+                                        <input type="hidden" name="transaction_id" value="<?php echo $transaction_id; ?>"/>
+                                        <input type="submit" name="confirmTransaction" value="Confirm"/>
+                                    </form>
+                                </td>
                                 <td>
                                     <form name="deleteTransaction" action="delete_transaction.php" method="POST">
                                         <input type="hidden" name="transaction_id" value="<?php echo $transaction_id; ?>"/>
@@ -141,12 +147,12 @@ and open the template in the editor.
                             <?php
                             $result1 = db::getInstance()->get_all_transaction_business();
                             while ($row = mysqli_fetch_array($result1)):
-                                echo "<tr><td>" . htmlentities($row["transaction_id"]) . "</td>";
-                                echo "<td>" . htmlentities($row["business_name"]) . "</td>";
-                                echo "<td>" . htmlentities($row["salesman_name"]) . "</td>";
+                                echo "<tr><td>" . htmlentities($row["TransactionID"]) . "</td>";
+                                echo "<td>" . htmlentities($row["Name"]) . "</td>";
+                                echo "<td>" . htmlentities($row["SalespersonName"]) . "</td>";
                                 echo "<td>" . htmlentities($row["date"]) . "</td>";
-                                echo "<td>" . htmlentities($row["remark"]) . "</td>";
-                                $transaction_id = $row["transaction_id"];
+                                echo "<td>" . htmlentities($row["Status"]) . "</td>";
+                                $transaction_id = $row["TransactionID"];
                                 $result_product = db::getInstance()->get_all_product_by_transaction_id($transaction_id);
                                 echo "<td>";
                                 while ($row = mysqli_fetch_array($result_product)) {
@@ -154,6 +160,12 @@ and open the template in the editor.
                                 }
                                 echo "</td>";
                                 ?>
+                                <td>
+                                    <form name="confirmTransaction" action="confirm_transaction.php" method="POST">
+                                        <input type="hidden" name="transaction_id" value="<?php echo $transaction_id; ?>"/>
+                                        <input type="submit" name="confirmTransaction" value="Confirm"/>
+                                    </form>
+                                </td>
                                 <td>
                                     <form name="deleteTransaction" action="delete_transaction.php" method="POST">
                                         <input type="hidden" name="transaction_id" value="<?php echo $transaction_id; ?>"/>

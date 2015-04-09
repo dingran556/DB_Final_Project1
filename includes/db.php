@@ -50,12 +50,20 @@ class db extends mysqli {
         return $this->query("SELECT Employee.EmployeeID, Employee.Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Region_Name From Employee, Region WHERE Job_Title = 'Region Manager' and Employee.EmployeeID = Region_ManagerID");
     }
     
+    public function get_all_region_manager_id() {
+        return $this->query("SELECT Employee.EmployeeID, Employee.Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Region_Name From Employee, Region WHERE Job_Title = 'Region Manager' Group By EmployeeID");
+    }
+    
     public function get_all_salesman() {
         return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Job_Title = 'Salesperon' and Employee.EmployeeID = Store_Mapping.EmployeeID");
     }
-
+    
     public function get_all_store_manager() {
         return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Job_Title = 'Store Manager' and Employee.EmployeeID = Store_Mapping.EmployeeID");
+    } 
+
+    public function get_all_store_manager_id() {
+        return $this->query("SELECT Employee.EmployeeID, Name, Job_Title, Street, City, State, Zipcode, Email, Salary, Assigned_Store From Employee, Store_Mapping WHERE Job_Title = 'Store Manager' Group By EmployeeID");
     }    
     public function get_salesman_information_by_name($name){
         $name = $this->real_escape_string($name);
@@ -181,95 +189,71 @@ class db extends mysqli {
     }
     
     public function delete_region($region_id){
-        $this->query("DELETE FROM region WHERE region_id = ". $region_id);
+        $this->query("DELETE FROM Region WHERE RegionID = ". $region_id);
     }
     
-    public function insert_region($region_name, $region_manager_name){
-        $region_manager_name = $this->real_escape_string($region_manager_name);
+    public function insert_region($region_name, $region_manager_id){
         $region_name = $this->real_escape_string($region_name);
-        $result = $this->query("SELECT region_manager_id FROM region_manager WHERE region_manager_name = '". $region_manager_name . "'");
-        $row = mysqli_fetch_array($result);
-        $region_manager_id = $row["region_manager_id"];
-        mysqli_free_result($result);
-        $this->query("INSERT INTO region (region_name, region_manager_id) VALUES('". $region_name ."',". $region_manager_id .")");
+        $this->query("INSERT INTO Region (Region_Name, Region_ManagerID) VALUES('". $region_name ."',". $region_manager_id .")");
     }
     
-    public function update_region($region_id, $region_name, $region_manager_name){
-        $region_manager_name = $this->real_escape_string($region_manager_name);
+    public function update_region($region_id, $region_name, $region_manager_id){
         $region_name = $this->real_escape_string($region_name);
-        $result = $this->query("SELECT region_manager_id FROM region_manager WHERE region_manager_name = '". $region_manager_name . "'");
-        $row = mysqli_fetch_array($result);
-        $region_manager_id = $row["region_manager_id"];
-        mysqli_free_result($result);
-        $sql = "UPDATE region SET region_name = '" . $region_name . 
-                "', region_manager_id = " . $region_manager_id . " WHERE region_id = ". $region_id ;
+        $sql = "UPDATE region SET Region_Name = '" . $region_name . 
+                "', Region_ManagerID = " . $region_manager_id . " WHERE RegionID = ". $region_id ;
         $this->query($sql);
     }
     
     public function delete_store($store_id){
-        $this->query("DELETE FROM store WHERE store_id = ". $store_id);
+        $result = $this->query("SELECT Store_ManagerID FROM Store WHERE StoreID = '". $store_id . "'");
+        $row = mysqli_fetch_array($result);
+        $store_manager_id = $row["Store_ManagerID"];
+        $this->query("DELETE FROM Store WHERE StoreID  = ". $store_id);
+        $this->query("DELETE FROM Store_Mapping WHERE EmployeeID  = ". $store_manager_id);
     }
     
     public function get_region_by_id($region_id){
-        return $this->query("SELECT region_id, region_name, region_manager_name FROM region, region_manager WHERE region.region_manager_id = region_manager.region_manager_id AND region_id = ". $region_id);
+        return $this->query("SELECT RegionID, Region_Name, Region_ManagerID FROM Region WHERE RegionID = ". $region_id);
     }
     
     public function get_all_store(){
-        $sql = "SELECT S.store_id, SM.manager_name, R.region_name, S.street_name, S.city, CS.state, S.zip_code
-                FROM store AS S, store_manager AS SM, region AS R, city_state AS CS
-                WHERE S.store_manager_id = SM.store_manager_id AND S.region_id = R.region_id AND CS.city = S.city
-                GROUP BY (S.store_id)";
+        $sql = "SELECT StoreID, Store_ManagerID, Store_Name, Region_ID, Store.Street, Store.City, Store.State, Store.ZipCode, Employee.Name, Region.Region_Name From Store,Employee,Region WHERE Store_ManagerID = EmployeeID and Region_ID=RegionID GROUP BY (StoreID)";
         return $this->query($sql);
     }
     
     public function get_number_of_salesman($store_id){
-        $sql = "SELECT count(SA.salesman_id) as number_of_salesman"
-                . " FROM store AS S, salesman AS SA"
-                . " WHERE SA.store_id = S.store_id AND S.store_id = ". $store_id;
+        $sql = "SELECT Assigned_Store, count(EmployeeID) as Employee_Number 
+                FROM Store_Mapping
+                Where Assigned_Store = ". $store_id;
         return $this->query($sql);
                 
     }
     
     public function get_store_by_id($store_id){
-        $sql = "SELECT S.store_id, SM.manager_name, R.region_name, S.street_name, S.city, S.zip_code
-                FROM store AS S, store_manager AS SM, region AS R
-                WHERE S.store_manager_id = SM.store_manager_id AND S.region_id = R.region_id AND S.store_id = ". $store_id;
+        $sql = "SELECT StoreID, Store_ManagerID, Region_ID, Store_Name, Store.Street, Store.City, Store.State, Store.ZipCode, Employee.Name, Region.Region_Name 
+                From Store,Employee,Region WHERE Store_ManagerID = EmployeeID and Region_ID=RegionID and StoreID= " . $store_id ." GROUP BY (StoreID)";
         return $this->query($sql);
     }
     
-    public function insert_store($manager_name, $region_name, $street_name, $city, $zip_code){
-        $manager_name = $this->real_escape_string($manager_name);
-        $result = $this->query("SELECT store_manager_id FROM store_manager WHERE manager_name = '". $manager_name . "'");
-        $row = mysqli_fetch_array($result);
-        $store_manager_id = $row["store_manager_id"];
-        mysqli_free_result($result);
-        $region_name = $this->real_escape_string($region_name);
-        $result = $this->query("SELECT region_id FROM region WHERE region_name = '". $region_name . "'");
-        $row = mysqli_fetch_array($result);
-        $region_id = $row["region_id"];
-        mysqli_free_result($result);
+    public function insert_store($manager_id, $region_id, $store_name, $street_name, $city, $state, $zip_code){
+        $store_name = $this->real_escape_string($store_name);
         $street_name = $this->real_escape_string($street_name);
         $city = $this->real_escape_string($city);
-        $sql = "INSERT INTO store (store_manager_id, region_id, street_name, city, zip_code) "
-                . "VALUES(". $store_manager_id .",". $region_id . ",'". $street_name . "','". $city . "',". $zip_code .")";
-        $this->query($sql);        
+        $state = $this->real_escape_string($state);
+        $sql = "INSERT INTO FinalProject.Store (Store_ManagerID, Region_ID, Store_Name, Street, City, State, ZipCode) VALUES ('". $manager_id ."', '". $region_id ."', '". $store_name ."', '". $street_name ."', '". $city ."', '". $state ."', '". $zip_code . "')";
+        //$result = mysql_query($sql) or trigger_error(mysql_error()." ".$sql);
+        $this->query($sql);
+        $this->query("INSERT INTO Store_Mapping (EmployeeID, Assigned_Store)" . 
+                        "VALUES (" . $manager_id . ", LAST_INSERT_ID())");
     }
     
-    public function update_store($store_id, $manager_name, $region_name, $street_name, $city, $zip_code){
-        $manager_name = $this->real_escape_string($manager_name);
-        $result = $this->query("SELECT store_manager_id FROM store_manager WHERE manager_name = '". $manager_name . "'");
-        $row = mysqli_fetch_array($result);
-        $store_manager_id = $row["store_manager_id"];
-        mysqli_free_result($result);
-        $region_name = $this->real_escape_string($region_name);
-        $result = $this->query("SELECT region_id FROM region WHERE region_name = '". $region_name . "'");
-        $row = mysqli_fetch_array($result);
-        $region_id = $row["region_id"];
-        mysqli_free_result($result);
+    public function update_store($store_id, $manager_id, $region_id, $store_name, $street_name, $city, $state, $zip_code){
+        $store_name = $this->real_escape_string($store_name);
         $street_name = $this->real_escape_string($street_name);
         $city = $this->real_escape_string($city);
-        $sql = "UPDATE store SET store_manager_id = ". $store_manager_id .", region_id = ". $region_id .
-                ", street_name = '". $street_name ."', city = '". $city ."', zip_code = ". $zip_code . " WHERE store_id = ". $store_id;
+        $state = $this->real_escape_string($state);
+        $sql = "UPDATE FinalProject.Store SET Store_ManagerID = ". $manager_id .", Region_ID = ". $region_id .
+                ", Store_Name = '". $store_name ."', Street = '". $street_name ."', City = '". $city ."', State = '". $state ."', ZipCode = ". $zip_code . " WHERE StoreID = ". $store_id;
         $this->query($sql);
     }
     
@@ -291,51 +275,70 @@ class db extends mysqli {
     }
     
     public function get_all_transaction_home(){
-        $sql = "select T.transaction_id, H.home_name, S.salesman_name, T.date, T.remark
-                from transactions as T, home as H, salesman as S
-                where T.customer_id = H.customer_id and T.salesman_id = S.salesman_id";
+        $sql = "Select T.TransactionID, C.Name, E.Name as SalespersonName, T.date, T.Status
+                From Transaction as T, Customer as C, Employee as E
+                Where T.CustomerID = C.CustomerID and T.SalespersonID = E.EmployeeID and C.Type='Individual'";
         return $this->query($sql);        
     }
     
     public function get_all_transaction_business(){
-        $sql = "select T.transaction_id, B.business_name, S.salesman_name, T.date, T.remark
-                from transactions as T, business as B, salesman as S
-                where T.customer_id = B.customer_id and T.salesman_id = S.salesman_id";
+        $sql = "Select T.TransactionID, C.Name, E.Name as SalespersonName, T.date, T.Status
+                From Transaction as T, Customer as C, Employee as E
+                Where T.CustomerID = C.CustomerID and T.SalespersonID = E.EmployeeID and C.Type= 'Business'";
         return $this->query($sql);        
     }
     
     public function get_all_product_by_transaction_id($transaction_id){
-        $sql = "select P.name
-                from transactions as T, order_specify as OS, product as P
-                where T.transaction_id = OS.transaction_id and P.product_id = OS.product_id and T.transaction_id = ". $transaction_id;
+        $sql = "Select P.name
+                From Transaction as T, TransactionDetails as TS, Product as P
+                Where T.TransactionID = TS.TransactionID and P.ProductID = TS.ProductID and T.TransactionID = ". $transaction_id;
         return $this->query($sql);
     }
     
+    public function confirm_transaction($transaction_id){
+        $sql = "UPDATE Transaction SET Status = 'Completed' WHERE TransactionID =".$transaction_id;
+        return $this->query($sql);
+        $sql = "SELECT sum(ProductPrice*Quantity)as TotalAmount FROM FinalProject.TransactionDetails Where TransactionDetailsID =".$transaction_id;
+        $result = $this->query($sql);
+        $row = mysqli_fetch_array($result);
+        $TotalAmount = $row["TotalAmount"];
+        mysqli_free_result($result);
+        $remark = "Completed";
+        $sql = "INSERT INTO Transaction_Payment (TranscationID, Payment_Amout, Status)"
+             . "VALUES(". $transaction_id .",". $TotalAmount . ", ' . $remark . ')";
+        $this->query($sql);
+    }
+    
     public function delete_transaction($transaction_id){
-        $this->query("DELETE FROM transactions WHERE transaction_id = ". $transaction_id);
+        $this->query("DELETE FROM Transaction WHERE transaction_id = ". $transaction_id);
     }
     
     public function insert_transaction($customer_id, $salesman_name, $date, $remark){
         $salesman_name = $this->real_escape_string($salesman_name);
-        $result = $this->query("SELECT salesman_id FROM salesman WHERE salesman_name = '". $salesman_name . "'");
+        $result = $this->query("SELECT Employee.EmployeeID, Assigned_Store FROM Employee, Store_Mapping WHERE Employee.EmployeeID=Store_Mapping.EmployeeID and Name = '". $salesman_name . "'");
         $row = mysqli_fetch_array($result);
-        $salesman_id = $row["salesman_id"];
+        $salesman_id = $row["EmployeeID"];
+        $store_id = $row["Assigned_Store"];
         mysqli_free_result($result);
-        $date = $this->format_date_for_sql($date);
         $remark = $this->real_escape_string($remark);
-        $sql = "INSERT INTO transactions (customer_id, salesman_id, date, remark) "
-                . "VALUES(". $customer_id .",". $salesman_id . ", ". $date . ", '". $remark . "')";
+        $sql = "INSERT INTO Transaction (CustomerID, SalespersonID, StoreID, Date, Status) "
+                . "VALUES(". $customer_id .",". $salesman_id . ",". $store_id . ", '". $date . "', '". $remark . "')";
         $this->query($sql);
     }
     
     public function insert_order_specify($last_transaction_id, $id, $amount){
-        $sql = "INSERT INTO order_specify (transaction_id, product_id, amount) "
-                . "VALUES(". $last_transaction_id .", ". $id .", ". $amount .")";
+        $result = $this->query("SELECT Base_Price FROM Product WHERE ProductID = ". $id . "");
+        $row = mysqli_fetch_array($result);
+        $base_price = $row["Base_Price"];
+        mysqli_free_result($result);
+        $sql = "INSERT INTO TransactionDetails (TransactionID, ProductID, Quantity, ProductPrice) "
+                . "VALUES(". $last_transaction_id .", ". $id .", ". $amount .",". $base_price .")";
+        //$result = mysql_query($sql) or trigger_error(mysql_error()." ".$sql);
         $this->query($sql);
     }
     
     public function get_all_customer_id(){
-        return $this->query("select customer_id from customer");
+        return $this->query("select CustomerID from customer");
     }
     
     public function get_all_customer_business(){
@@ -343,11 +346,11 @@ class db extends mysqli {
     }
     
     public function get_all_product(){
-        return $this->query("select * from product");
+        return $this->query("select * from Product");
     }
     
     public function reduce_product($product_id, $amount){
-        $sql = "UPDATE product SET inventory_amount = inventory_amount-". $amount ." WHERE product_id=". $product_id;
+        $sql = "UPDATE Product SET Inventory = Inventory-". $amount ." WHERE ProductID=". $product_id;
         $this->query($sql);
     }
     

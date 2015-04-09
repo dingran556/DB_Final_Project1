@@ -72,7 +72,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                Cosmetic Store <small class="on-right"> Salesperson</small>
+                Cosmetic Store <small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -92,10 +92,8 @@ and open the template in the editor.
                             <ul>
                                 <li class="title">Home</li>
                                 <li><a href="store_main.php"><i class="icon-home"></i>Store Home</a></li>
-                                <li class="title">Region</li>
                                 <li class="stick bg-red"><a href="view_region.php"><i class="icon-cart"></i>Region Info</a></li>
-                                <li class="title">Store</li>
-                                <li class="stick bg-blue active"><a href="view_store.php"><i class="icon-cart-2"></i>StoreInfo</a></li>
+                                <li class="stick bg-blue active"><a href="view_store.php"><i class="icon-cart-2"></i>Store Info</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -106,11 +104,12 @@ and open the template in the editor.
                                 <tr>
                                     <th class="text-left">Store ID</th>
                                     <th class="text-left">Store Manager</th>
+                                    <th class="text-left">Store Name</th>
                                     <th class="text-left">Region</th>
                                     <th class="text-left">Street</th>
                                     <th class="text-left">City</th>
                                     <th class="text-left">State</th>
-                                    <th class="text-left">Zipcode</th>
+                                    <th class="text-left">Zip Code</th>
                                     <th class="text-left">Number of Salesman</th>
                                     <th class="text-left">Edit</th>
                                     <th class="text-left">Delete</th>
@@ -121,17 +120,18 @@ and open the template in the editor.
                                     require_once("Includes/db.php");
                                     $result = db::getInstance()->get_all_store();
                                     while($row = mysqli_fetch_array($result)):
-                                        echo "<tr><td>" . htmlentities($row["store_id"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["manager_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["region_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["street_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["city"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["state"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["zip_code"]) . "</td>";                           
-                                        $store_id = $row["store_id"];
+                                        echo "<tr><td>" . htmlentities($row["StoreID"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Store_Name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Region_Name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Street"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["City"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["State"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["ZipCode"]) . "</td>";                           
+                                        $store_id = $row["StoreID"];
                                         $inresult = db::getInstance()->get_number_of_salesman($store_id);
                                         $inrow = mysqli_fetch_array($inresult);
-                                        echo "<td>" . htmlentities($inrow["number_of_salesman"]) . "</td>";
+                                        echo "<td>" . htmlentities($inrow["Employee_Number"]) . "</td>";
                                         mysqli_free_result($inresult);
                                 ?>
                                 <td>

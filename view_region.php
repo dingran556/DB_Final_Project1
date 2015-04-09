@@ -32,7 +32,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
             <div class="element">
-                IManager
+                iManager
             </div>
  
             <span class="element-divider"></span>
@@ -57,7 +57,6 @@ and open the template in the editor.
             <span class="element-divider place-right"></span>
             <button class="element image-button image-left place-right">
                 <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                     echo $_SESSION['user'];
                     }
@@ -73,7 +72,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store <small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -93,10 +92,8 @@ and open the template in the editor.
                             <ul>
                                 <li class="title">Home</li>
                                 <li><a href="store_main.php"><i class="icon-home"></i>Store Home</a></li>
-                                <li class="title">Region</li>
                                 <li class="stick bg-red active"><a href="view_region.php"><i class="icon-cart"></i>Region Info</a></li>
-                                <li class="title">Store</li>
-                                <li class="stick bg-blue"><a href="view_store.php"><i class="icon-cart-2"></i>StoreInfo</a></li>
+                                <li class="stick bg-blue"><a href="view_store.php"><i class="icon-cart-2"></i>Store Info</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -116,9 +113,9 @@ and open the template in the editor.
                                     require_once("Includes/db.php");
                                     $result = db::getInstance()->get_all_region();
                                     while($row = mysqli_fetch_array($result)):
-                                        echo "<tr><td>" . htmlentities($row["region_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["region_manager_name"]) . "</td>";
-                                        $region_id = $row["region_id"];
+                                        echo "<tr><td>" . htmlentities($row["Region_Name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Name"]) . "</td>";
+                                        $region_id = $row["RegionID"];
                                 ?>
                                 <td>
                                     <form name="editRegion" action="edit_region.php" method="GET">
