@@ -15,12 +15,11 @@ and open the template in the editor.
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery.widget.min.js"></script>
     <script src="js/jquery/jquery.mousewheel.js"></script>
-    <script src="js/jquery/jquery.dataTables.js"></script>
     <script src="js/prettify/prettify.js"></script>
 
     <!-- Metro UI CSS JavaScript plugins -->
     <script src="js/load-metro.js"></script>  
-
+    
     <script src="js/docs.js"></script>
     <script src="js/github.info.js"></script>
 
@@ -31,47 +30,48 @@ and open the template in the editor.
     <body class="metro">
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
-                <div class="element">
-                    iManager
-                </div>
-
-                <span class="element-divider"></span>
-                <a class="element brand" href="index.php"><span class="icon-link-2"></span></a>
-                <span class="element-divider"></span>
-
-                <div class="element place-right">
-                    <a class="dropdown-toggle" href="#">
-                        <span class="icon-cog"></span>
-                    </a>
-                    <ul class="dropdown-menu place-right" data-role="dropdown">
-                        <li><a href="store_main.php">Store</a></li>
-                        <li><a href="employee_main.php">Staff</a></li>
-                        <li><a href="customer_main.php">Customer</a></li>
-                        <li><a href="product_main.php">Product</a></li>
-                        <li><a href="transaction_main.php">Transaction</a></li> 
-                        <li><a href="statistics_main.php">Statistics</a></li>
-                    </ul>
-                </div>
-                <span class="element-divider place-right"></span>
-                <a class="element place-right" href="welcome.php"><span class="icon-home"></span></a>
-                <span class="element-divider place-right"></span>
-                <button class="element image-button image-left place-right">
-                    <?php
+            <div class="element">
+                iManager
+            </div>
+ 
+            <span class="element-divider"></span>
+            <a class="element brand" href="index.php"><span class="icon-link-2"></span></a>
+            <span class="element-divider"></span>
+ 
+            <div class="element place-right">
+                <a class="dropdown-toggle" href="#">
+                    <span class="icon-cog"></span>
+                </a>
+                <ul class="dropdown-menu place-right" data-role="dropdown">
+                    <li><a href="store_main.php">Store</a></li>
+                    <li><a href="employee_main.php">Staff</a></li>
+                    <li><a href="customer_main.php">Customer</a></li>
+                    <li><a href="product_main.php">Product</a></li>
+                    <li><a href="transaction_main.php">Transaction</a></li> 
+                    <li><a href="statistics_main.php">Statistics</a></li>
+                </ul>
+            </div>
+            <span class="element-divider place-right"></span>
+            <a class="element place-right" href="welcome.php"><span class="icon-home"></span></a>
+            <span class="element-divider place-right"></span>
+            <button class="element image-button image-left place-right">
+                <?php
                     if (array_key_exists("user", $_SESSION)) {
-                        echo $_SESSION['user'];
-                    } else {
+                    echo $_SESSION['user'];
+                    }
+                    else {
                         header('Location: index.php');
                         exit;
                     }
-                    ?>
-                    <img src="images/default.png"/>
-                </button>
+                ?>
+                <img src="images/default.png"/>
+            </button>
             </nav>
         </nav>
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                 Cosmetic Store <small class="on-right">Employee</small>
+                Cosmetic Store<small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -86,7 +86,7 @@ and open the template in the editor.
             </nav>
             <div class="grid fluid">
                 <div class='row'>
-                    <div class="span3">
+                  <div class="span3">
                         <nav class="sidebar">
                             <ul>
                                 <li class="title">Statistics</li>
@@ -105,19 +105,27 @@ and open the template in the editor.
                                         <li class="divider"></li>
                                         <li><a href="customer_compare.php">Customer Comparison</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="business_product.php">Business Analysis</a></li>
+                                        <li class="active"><a href="business_product.php">Business Analysis</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                     <div class='span8'>
-                        <legend>Show Some Statistics</legend>
+                        <form name="getproduct" action="business_product_result.php">
+                            <fieldset>
+                                <legend>Product Info</legend>
+                                <label>Find product information</label>
+                                <div class="input-control text" data-role="input-control">
+                                    <input type="text" name="name" value="" placeholder="type product name">
+                                    <button class="btn-clear" tabindex="-1"></button>
+                                </div>
+                                <input type="submit" value="Go">
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </body>
 </html>
-
-

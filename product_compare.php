@@ -32,7 +32,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
                 <div class="element">
-                    IManager
+                    iManager
                 </div>
 
                 <span class="element-divider"></span>
@@ -57,7 +57,6 @@ and open the template in the editor.
                 <span class="element-divider place-right"></span>
                 <button class="element image-button image-left place-right">
                     <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                         echo $_SESSION['user'];
                     } else {
@@ -72,7 +71,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                Cosmetic Store <small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -105,6 +104,8 @@ and open the template in the editor.
                                         <li><a href="region_compare.php">Region Comparison</a></li>
                                         <li class="divider"></li>
                                         <li><a href="customer_compare.php">Customer Comparison</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="business_product.php">Business Analysis</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -128,8 +129,8 @@ and open the template in the editor.
                                     $result = db::getInstance()->get_product_comp();
                                     while($row = mysqli_fetch_array($result)){
                                         echo "<tr><td>" . htmlentities($row["name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["product_kind"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["price"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Category"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Base_Price"]) . "</td>";
                                         echo "<td>" . htmlentities($row["total_sell"]) . "</td>";
                                         echo "<td>" . htmlentities($row["profit"]) . "</td></tr>";                                                                 
                                     }

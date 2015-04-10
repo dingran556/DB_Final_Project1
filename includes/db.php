@@ -346,7 +346,7 @@ class db extends mysqli {
     }
     
     public function get_all_product(){
-        return $this->query("select * from Product");
+        return $this->query("select * from Product where Inventory > 0");
     }
     
     public function reduce_product($product_id, $amount){
@@ -354,62 +354,47 @@ class db extends mysqli {
         $this->query($sql);
     }
     
-    function format_date_for_sql($date) {
-        if ($date == "")
-            return null;
-        else {
-            $dateParts = date_parse($date);
-            return $dateParts['year'] * 10000 + $dateParts['month'] * 100 + $dateParts['day'];
-        }
-    }
-    
     public function get_product_comp(){
-        $sql = "select P.`name`, P.product_kind, P.price, sum(OS.amount) as total_sell, sum(OS.amount)*P.price as profit
-                from order_specify as OS, product as P
-                where OS.product_id = P.product_id
-                group by P.product_id
+        $sql = "select P.name, P.Category, P.Base_Price, sum(TS.Quantity) as total_sell, (sum(TS.Quantity)*P.Base_Price-sum(TS.Quantity)*P.Cost) as profit
+                from TransactionDetails as TS, product as P
+                where TS.ProductID = P.ProductID
+                group by P.ProductID
                 order by total_sell desc";
         return $this->query($sql);
     }
     
     public function get_salesman_comp(){
-        $sql ="select S.salesman_name, S.email, S.store_id, count(T.transaction_id) as total_order
-                from salesman as S, transactions as T
-                where T.salesman_id = S.salesman_id
-                group by T.salesman_id
-                order by total_order desc";
+        $sql ="select E.name, E.Email, SM.Assigned_Store as StoreID, count(T.TransactionID) as total_order
+               from Employee as E, transaction as T, Store_Mapping as SM
+               where T.SalespersonID = E.EmployeeID and E.EmployeeID=SM.EmployeeID
+               group by T.SalespersonID
+               order by total_order desc";
         return $this->query($sql);
     }
     
     public function get_store_comp(){
-        $sql = "select S.store_id, SM.manager_name, S.street_name, S.city, CS.`state`, S.zip_code, count(T.transaction_id) as total_order
-                from store as S, store_manager as SM, salesman as SA, transactions as T, city_state as CS
-                where S.store_manager_id = SM.store_manager_id and SA.store_id = S.store_id and S.city = CS.city and T.salesman_id = SA.salesman_id
-                group by T.salesman_id
-                order by total_order desc";
+        $sql = "Select S.StoreID, S.Store_Name, E.name as Store_Manager, S.Street, S.City, S.State, S.Zipcode, count(T.TransactionID) as total_order
+                From Store as S, Transaction as T, Employee as E
+                Where T.StoreID=S.StoreID and E.EmployeeID=S.Store_ManagerID
+                Group by T.StoreID
+                Order by total_order desc";
         return $this->query($sql);
     }
     
     public function get_region_comp(){
-        $sql = "select R.region_name, RM.region_manager_name, count(T.transaction_id) as total_order
-                from region as R, store as S, region_manager as RM, salesman as SA, transactions as T
-                where R.region_id = S.region_id and R.region_manager_id = RM.region_manager_id and SA.store_id = S.store_id and T.salesman_id = SA.salesman_id
-                group by T.salesman_id
-                order by total_order desc";
+        $sql = "Select R.Region_Name, E.name, count(T.TransactionID) as total_order
+                From Region as R, Store as S, Employee as E, Transaction as T
+                Where R.RegionID = S.Region_ID and R.Region_ManagerID = E.EmployeeID and T.StoreID=S.StoreID
+                Group by R.RegionID
+                Order by total_order desc";
         return $this->query($sql);
     }
     
     public function get_cusotmer_comp(){
-        $sql = "select TEMP.name, count(T.transaction_id) as total_order
-                from (select H.home_name as name, C.customer_id
-                    from customer as C, home as H
-                    where C.customer_id = H.customer_id
-                    union
-                    select B.business_name as name, C.customer_id
-                    from customer as C, business as B
-                    where C.customer_id = B.customer_id) as TEMP, transactions as T
-                where TEMP.customer_id = T.customer_id
-                group by TEMP.customer_id
+        $sql = "select C.name,count(T.TransactionID) as total_order
+                from Customer as C, Transaction as T
+                where C.CustomerID = T.CustomerID
+                group by C.CustomerID
                 order by total_order desc";
         return $this->query($sql);
     }
@@ -570,6 +555,16 @@ class db extends mysqli {
         $name = $this->real_escape_string($name);
         return $this->query("select Name, ProductType, Category, Base_Price, ImageFile from Product where name= '" . $name . "'");
     }
+    
+    public function get_product_business_by_name($name){
+        $name = $this->real_escape_string($name);
+        return $this->query("select Business_Category, sum(Quantity) as Total_Bought
+                             from FinalProject.Product,FinalProject.TransactionDetails,FinalProject.Transaction,FinalProject.Business_Customer
+                             where FinalProject.Product.ProductID=FinalProject.TransactionDetails.ProductID 
+                             and FinalProject.TransactionDetails.TransactionID=FinalProject.Transaction.TransactionID
+                             and FinalProject.Transaction.CustomerID=FinalProject.Business_Customer.CustomerID
+                             and FinalProject.Product.Name= '" . $name . "' group by Business_Category;");
+        }     
     
     public function verify_users ($name, $password){
         $name = $this->real_escape_string($name);

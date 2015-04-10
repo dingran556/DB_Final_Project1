@@ -31,7 +31,7 @@ and open the template in the editor.
         <nav class="navigation-bar dark">
             <nav class="navigation-bar-content">
                 <div class="element">
-                    IManager
+                    iManager
                 </div>
 
                 <span class="element-divider"></span>
@@ -56,7 +56,6 @@ and open the template in the editor.
                 <span class="element-divider place-right"></span>
                 <button class="element image-button image-left place-right">
                     <?php
-                    session_start();
                     if (array_key_exists("user", $_SESSION)) {
                         echo $_SESSION['user'];
                     } else {
@@ -71,7 +70,7 @@ and open the template in the editor.
         <div class='container'>
             <h1>
                 <a href="/"><i class="icon-arrow-left-3 fg-darker smaller"></i></a>
-                RESTAURANT<small class="on-right">manager</small>
+                 Cosmetic Store <small class="on-right">Employee</small>
             </h1>
 
             <nav class="horizontal-menu">
@@ -125,8 +124,8 @@ and open the template in the editor.
                                     $result = db::getInstance()->get_product_comp();
                                     $row = mysqli_fetch_array($result);
                                         echo "<tr class=\"error\"><td>" . htmlentities($row["name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["product_kind"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["price"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Category"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Base_Price"]) . "</td>";
                                         echo "<td>" . htmlentities($row["total_sell"]) . "</td>";
                                         echo "<td>" . htmlentities($row["profit"]) . "</td></tr>";                         
                                         mysqli_free_result($result);
@@ -147,9 +146,9 @@ and open the template in the editor.
                                 <?php
                                     $result = db::getInstance()->get_salesman_comp();
                                     $row = mysqli_fetch_array($result);
-                                        echo "<tr class=\"success\"><td>" . htmlentities($row["salesman_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["email"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["store_id"]) . "</td>";
+                                        echo "<tr class=\"success\"><td>" . htmlentities($row["name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Email"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["StoreID"]) . "</td>";
                                         echo "<td>" . htmlentities($row["total_order"]) . "</td></tr>";                    
                                         mysqli_free_result($result);
                                 ?>
@@ -159,12 +158,12 @@ and open the template in the editor.
                             <legend>Top Store</legend>
                             <thead>
                                 <tr>
-                                    <th class="text-left">Id</th>
+                                    <th class="text-left">ID</th>
                                     <th class="text-left">Store Manager</th>
                                     <th class="text-left">Street</th>
                                     <th class="text-left">City</th>
                                     <th class="text-left">State</th>
-                                    <th class="text-left">Zipcode</th>
+                                    <th class="text-left">ZipCode</th>
                                     <th class="text-left">Total Order Selling</th>
                                 </tr>
                             </thead>
@@ -172,12 +171,12 @@ and open the template in the editor.
                                 <?php
                                     $result = db::getInstance()->get_store_comp();
                                     $row = mysqli_fetch_array($result);
-                                        echo "<tr class=\"warning\"><td>" . htmlentities($row["store_id"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["manager_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["street_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["city"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["state"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["zip_code"]) . "</td>";
+                                        echo "<tr class=\"warning\"><td>" . htmlentities($row["StoreID"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Store_Manager"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Street"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["City"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["State"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["Zipcode"]) . "</td>";
                                         echo "<td>" . htmlentities($row["total_order"]) . "</td></tr>";                 
                                         mysqli_free_result($result);
                                 ?>
@@ -196,8 +195,8 @@ and open the template in the editor.
                                 <?php
                                     $result = db::getInstance()->get_region_comp();
                                     $row = mysqli_fetch_array($result);
-                                        echo "<tr class=\"info\"><td>" . htmlentities($row["region_name"]) . "</td>";
-                                        echo "<td>" . htmlentities($row["region_manager_name"]) . "</td>";
+                                        echo "<tr class=\"info\"><td>" . htmlentities($row["Region_Name"]) . "</td>";
+                                        echo "<td>" . htmlentities($row["name"]) . "</td>";
                                         echo "<td>" . htmlentities($row["total_order"]) . "</td></tr>";                 
                                         mysqli_free_result($result);
                                 ?>
