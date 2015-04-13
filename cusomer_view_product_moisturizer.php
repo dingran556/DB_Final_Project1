@@ -77,10 +77,10 @@ and open the template in the editor.
                             <legend>Product Info</legend>
                             <thead>
                                 <tr>
-                                    <th class="text-left">name</th>
-                                    <th class="text-left">inventory amount</th>
-                                    <th class="text-left">price</th>
-                                    <th class="text-left">main material</th>
+                                    <th class="text-left">Name</th>
+                                    <th class="text-left">Product Type</th>
+                                    <th class="text-left">Price</th>
+                                    <th class="text-left">Picture</th>
                                 </tr>
                             </thead>
                             <tbody>    

@@ -298,7 +298,7 @@ class db extends mysqli {
     public function confirm_transaction($transaction_id){
         $sql = "UPDATE Transaction SET Status = 'Completed' WHERE TransactionID =".$transaction_id;
         return $this->query($sql);
-        $sql = "SELECT sum(ProductPrice*Quantity)as TotalAmount FROM FinalProject.TransactionDetails Where TransactionDetailsID =".$transaction_id;
+        $sql = "SELECT sum(ProductPrice*Quantity) as TotalAmount FROM FinalProject.TransactionDetails Where TransactionID =".$transaction_id;
         $result = $this->query($sql);
         $row = mysqli_fetch_array($result);
         $TotalAmount = $row["TotalAmount"];
@@ -310,7 +310,7 @@ class db extends mysqli {
     }
     
     public function delete_transaction($transaction_id){
-        $this->query("DELETE FROM Transaction WHERE transaction_id = ". $transaction_id);
+        $this->query("DELETE FROM Transaction WHERE TransactionID = ". $transaction_id);
     }
     
     public function insert_transaction($customer_id, $salesman_name, $date, $remark){
@@ -327,14 +327,19 @@ class db extends mysqli {
     }
     
     public function insert_order_specify($last_transaction_id, $id, $amount){
-        $result = $this->query("SELECT Base_Price FROM Product WHERE ProductID = ". $id . "");
+        $result = $this->query("SELECT Inventory, Base_Price FROM Product WHERE ProductID = ". $id . "");
         $row = mysqli_fetch_array($result);
         $base_price = $row["Base_Price"];
+        $Inventory = $row["Inventory"];
         mysqli_free_result($result);
+        if($Inventory<$amount){
+        $this->query("DELETE FROM Transaction WHERE TransactionID = ". $last_transaction_id);
+        }
+        else {
         $sql = "INSERT INTO TransactionDetails (TransactionID, ProductID, Quantity, ProductPrice) "
                 . "VALUES(". $last_transaction_id .", ". $id .", ". $amount .",". $base_price .")";
-        //$result = mysql_query($sql) or trigger_error(mysql_error()." ".$sql);
         $this->query($sql);
+        }
     }
     
     public function get_all_customer_id(){

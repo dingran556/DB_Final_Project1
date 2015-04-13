@@ -98,9 +98,13 @@ and open the template in the editor.
                                         <li class="divider"></li>
                                         <li><a href="salesman_compare.php">Salesman Performance</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="store_compare.php">Store Comparison</a></li>
+                                        <li class="divider"><a href="store_compare.php">Store Comparison</a></li>
                                         <li class="divider"></li>
                                         <li><a href="region_compare.php">Region Comparison</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="customer_compare.php">Customer Comparison</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="business_product.php">Business Analysis</a></li>
                                     </ul>
                                 </li>
                             </ul>

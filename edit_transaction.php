@@ -153,7 +153,7 @@ if (array_key_exists("user", $_SESSION)) {
                                         ?>
                                     </select>
                                 </div>
-                                Salesperson ID:</br>
+                                Salesperson Name:</br>
                                 <div class="input-control select" data-role="input-control">
                                     <select name="salesman_name">
                                         <option><?php echo $transaction['salesman_name']; ?></option>
